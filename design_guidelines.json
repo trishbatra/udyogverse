@@ -1,0 +1,81 @@
+{
+  "theme": "Light",
+  "archetype": "1 - Organic & Earthy",
+  "design_philosophy": "A digital board game blending modern UI with traditional Indian cultural touchpoints. It uses warm terracotta, turmeric, and deep indigo tones over sandy backgrounds. The aesthetic is tactile, resembling physical board games and startup hustle in local Indian markets, mixing nostalgia with an educational gaming experience.",
+  "colors": {
+    "background": "#FAF4E8",
+    "surface": "#FFFFFF",
+    "primary": "#D35400",
+    "primary_hover": "#E67E22",
+    "secondary": "#F39C12",
+    "accent": "#2E4053",
+    "text_primary": "#2C3E50",
+    "text_secondary": "#7F8C8D",
+    "success": "#27AE60",
+    "danger": "#C0392B",
+    "warning": "#E67E22",
+    "border": "#E5E7EB",
+    "snake": "#C0392B",
+    "ladder": "#27AE60"
+  },
+  "typography": {
+    "headings": "Outfit",
+    "body": "Work Sans",
+    "rules": {
+      "h1": "text-4xl sm:text-5xl lg:text-6xl tracking-tight font-bold text-[#2C3E50]",
+      "h2": "text-2xl sm:text-3xl lg:text-4xl tracking-tight font-semibold text-[#2C3E50]",
+      "h3": "text-xl sm:text-2xl font-medium text-[#2C3E50]",
+      "body": "text-base leading-relaxed text-[#2C3E50]",
+      "labels": "text-xs uppercase tracking-[0.2em] font-semibold text-[#7F8C8D]"
+    }
+  },
+  "spacing_and_layout": {
+    "general": "Generous spacing philosophy. Use p-4, p-6, p-8 extensively to create breathing room.",
+    "board": "Grid layout representing 50 tiles, snaking pattern (alternating row directions). Use CSS Grid or Flex wrap with row-reverse for even rows to create the snake path.",
+    "dashboard": "Bento 'Control Room' Grid format. Dense but legible, using crisp 1px borders.",
+    "cards": "Neumorphic tactile physical feel or flat with a subtle 1px border. Card internal padding must be at least p-6."
+  },
+  "motion_and_interactions": {
+    "hover": "Slight lift (-translate-y-1) and shadow increase on action cards and interactive board tiles.",
+    "dice": "Framer Motion 3D rotation or 2D shake animation to simulate rolling.",
+    "movement": "Player token transitions smoothly between tiles using framer-motion layout animations.",
+    "modals": "Backdrop blur with scale-in animation for fundraising and event modals."
+  },
+  "components": {
+    "action_cards": "Custom HTML/Tailwind with tactile shadow and 1px border-orange-200. Give them a 'physical card' aspect ratio.",
+    "dashboard_stats": "Use rectangular, cardless or flat bordered divs for data visualization. Avoid standard puffy shadows.",
+    "fundraising_modal": "Shadcn Dialog with backdrop-blur-md, a terracotta header, and prominent Accept/Decline CTA.",
+    "bug_meter": "Segmented progress bar using a gradient from secondary (yellow) to danger (red).",
+    "buttons": "Shadcn Button, customized with primary terracotta color, solid hover states, and high contrast text."
+  },
+  "media": {
+    "background_pattern": {
+      "url": "https://images.unsplash.com/photo-1723283207288-2bcb590f136c?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1MTN8MHwxfHNlYXJjaHwyfHxpbmRpYW4lMjBibG9jayUyMHByaW50JTIwcGF0dGVybnxlbnwwfHx8fDE3NzQ2MDI0NTh8MA&ixlib=rb-4.1.0&q=85",
+      "description": "Subtle Indian block print pattern.",
+      "usage": "Use with opacity-5 overlaid on the main background or inside the player dashboard sidebar to provide an Indian texture."
+    },
+    "startup_vibe": {
+      "url": "https://images.pexels.com/photos/984509/pexels-photo-984509.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
+      "description": "Indian street market vendor.",
+      "usage": "Use as a hero image or onboarding background representing the 'Shuruaat' (Start) phase."
+    },
+    "board_game_vibe": {
+      "url": "https://images.pexels.com/photos/6127060/pexels-photo-6127060.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
+      "description": "Vintage board game setup.",
+      "usage": "Decorative element in the Idea Selection screen or Game Over/IPO screen."
+    }
+  },
+  "icons": "lucide-react for UI elements, ensuring stroke colors match text_primary.",
+  "instructions_to_main_agent": [
+    "Build the 50-tile board game using a CSS Grid (e.g., grid-cols-5 or grid-cols-10) with logic that visibly 'snakes'. Use flex-row-reverse for alternating rows to make the path continuous.",
+    "Ensure all interactive elements have data-testid attributes (e.g., data-testid='roll-dice-button', data-testid='action-card-1').",
+    "Use Framer Motion to animate the player's token (pawn) moving sequentially from tile to tile.",
+    "Implement the 'Bug Meter' as a visible gauge on the dashboard, affecting the snake probability.",
+    "Incorporate Hindi words seamlessly in English text, e.g., 'Shuruaat (Start)', 'Safal Udyam (IPO)'.",
+    "Ensure color contrast meets APCA/WCAG standards, specifically white text on terracotta backgrounds.",
+    "Avoid Shadcn 'Card' for the board tiles; use pure HTML/Tailwind for better layout, sizing, and overlapping control.",
+    "Implement action cards without LLM logic—use predefined static JSON data structures for the cards.",
+    "Layout the main screen intelligently: Split the viewport between the Dashboard (left/top) and the Game Board (right/bottom) using the Bento grid approach.",
+    "For the board tiles, use clear typography and color-coding to signify different stages (Idea -> IPO)."
+  ]
+}

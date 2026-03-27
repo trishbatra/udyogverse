@@ -19,54 +19,67 @@ mongo_url = os.environ['MONGO_URL']
 client = AsyncIOMotorClient(mongo_url)
 db = client[os.environ['DB_NAME']]
 
-# Create the main app without a prefix
+# Create the main app
 app = FastAPI()
 
 # Create a router with the /api prefix
 api_router = APIRouter(prefix="/api")
 
 
-# Define Models
-class StatusCheck(BaseModel):
-    model_config = ConfigDict(extra="ignore")  # Ignore MongoDB's _id field
-    
+# Models
+class LeaderboardEntry(BaseModel):
+    model_config = ConfigDict(extra="ignore")
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
-    client_name: str
-    timestamp: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    player_name: str
+    startup_idea: str
+    stage_reached: str
+    turns_taken: int
+    ownership_retained: int
+    customers: int
+    funds: int
+    won: bool
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
-class StatusCheckCreate(BaseModel):
-    client_name: str
 
-# Add your routes to the router instead of directly to app
+class LeaderboardCreate(BaseModel):
+    player_name: str
+    startup_idea: str
+    stage_reached: str
+    turns_taken: int
+    ownership_retained: int
+    customers: int
+    funds: int
+    won: bool
+
+
 @api_router.get("/")
 async def root():
-    return {"message": "Hello World"}
+    return {"message": "Udyogverse API"}
 
-@api_router.post("/status", response_model=StatusCheck)
-async def create_status_check(input: StatusCheckCreate):
-    status_dict = input.model_dump()
-    status_obj = StatusCheck(**status_dict)
-    
-    # Convert to dict and serialize datetime to ISO string for MongoDB
-    doc = status_obj.model_dump()
-    doc['timestamp'] = doc['timestamp'].isoformat()
-    
-    _ = await db.status_checks.insert_one(doc)
-    return status_obj
 
-@api_router.get("/status", response_model=List[StatusCheck])
-async def get_status_checks():
-    # Exclude MongoDB's _id field from the query results
-    status_checks = await db.status_checks.find({}, {"_id": 0}).to_list(1000)
-    
-    # Convert ISO string timestamps back to datetime objects
-    for check in status_checks:
-        if isinstance(check['timestamp'], str):
-            check['timestamp'] = datetime.fromisoformat(check['timestamp'])
-    
-    return status_checks
+@api_router.post("/leaderboard", response_model=LeaderboardEntry)
+async def create_leaderboard_entry(input_data: LeaderboardCreate):
+    entry = LeaderboardEntry(**input_data.model_dump())
+    doc = entry.model_dump()
+    doc['created_at'] = doc['created_at'].isoformat()
+    await db.leaderboard.insert_one(doc)
+    return entry
 
-# Include the router in the main app
+
+@api_router.get("/leaderboard", response_model=List[LeaderboardEntry])
+async def get_leaderboard():
+    entries = await db.leaderboard.find(
+        {}, {"_id": 0}
+    ).sort("customers", -1).limit(10).to_list(10)
+
+    for entry in entries:
+        if isinstance(entry.get('created_at'), str):
+            entry['created_at'] = datetime.fromisoformat(entry['created_at'])
+
+    return entries
+
+
+# Include the router
 app.include_router(api_router)
 
 app.add_middleware(
@@ -83,6 +96,7 @@ logging.basicConfig(
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 )
 logger = logging.getLogger(__name__)
+
 
 @app.on_event("shutdown")
 async def shutdown_db_client():

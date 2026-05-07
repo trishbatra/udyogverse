@@ -205,10 +205,15 @@ async def get_leaderboard():
 # Include the router
 app.include_router(api_router)
 
+_cors_origins_raw = os.environ.get('CORS_ORIGINS', '')
+_cors_origins = _cors_origins_raw.split(',') if _cors_origins_raw else ['*']
+# allow_credentials=True is invalid with wildcard origins (browser rejects it)
+_cors_credentials = _cors_origins != ['*']
+
 app.add_middleware(
     CORSMiddleware,
-    allow_credentials=True,
-    allow_origins=os.environ.get('CORS_ORIGINS', '*').split(','),
+    allow_credentials=_cors_credentials,
+    allow_origins=_cors_origins,
     allow_methods=["*"],
     allow_headers=["*"],
 )

@@ -1,4 +1,5 @@
-import { getBoardRows, getStageForTile, SNAKES, LADDERS } from '../../lib/gameData';
+import { getBoardRows, getStageForTile, getStageName, SNAKES, LADDERS } from '../../lib/gameData';
+import { useLanguage } from '../../lib/LanguageContext';
 import { ArrowDown, ArrowUp } from 'lucide-react';
 import {
   Tooltip,
@@ -10,6 +11,8 @@ import {
 const boardRows = getBoardRows();
 
 export default function GameBoard({ currentTile }) {
+  const { lang, t } = useLanguage();
+
   return (
     <TooltipProvider delayDuration={200}>
       <div className="game-board" data-testid="game-board">
@@ -38,7 +41,7 @@ export default function GameBoard({ currentTile }) {
                     >
                       <span className="tile-number">{tileNum}</span>
                       <span className="tile-stage" style={{ color: stage.borderColor }}>
-                        {stage.name === 'IPO / Exit' ? 'IPO' : stage.name}
+                        {stage.name === 'IPO / Exit' ? (lang === 'en' ? 'IPO' : getStageName(stage, lang)) : getStageName(stage, lang)}
                       </span>
 
                       {isSnakeHead && (
@@ -63,15 +66,15 @@ export default function GameBoard({ currentTile }) {
                     </div>
                   </TooltipTrigger>
                   <TooltipContent side="top" className="tile-tooltip">
-                    <p className="font-semibold">Tile {tileNum} - {stage.name}</p>
+                    <p className="font-semibold">{t('tileWord')} {tileNum} - {stage.name}</p>
                     {isSnakeHead && (
                       <p className="text-red-600 text-xs">
-                        Saanp! {SNAKES[tileNum].name} (Go to {SNAKES[tileNum].tail})
+                        {t('snakeTooltip')} {SNAKES[tileNum].name} ({t('goTo')} {SNAKES[tileNum].tail})
                       </p>
                     )}
                     {isLadderBottom && (
                       <p className="text-green-600 text-xs">
-                        Seedhi! {LADDERS[tileNum].name} (Climb to {LADDERS[tileNum].top})
+                        {t('ladderTooltip')} {LADDERS[tileNum].name} ({t('climbTo')} {LADDERS[tileNum].top})
                       </p>
                     )}
                   </TooltipContent>
@@ -84,13 +87,13 @@ export default function GameBoard({ currentTile }) {
         {/* Legend */}
         <div className="board-legend">
           <span className="legend-item">
-            <span className="legend-dot snake-dot" /> Saanp (Snake)
+            <span className="legend-dot snake-dot" /> {t('snakeLegend')}
           </span>
           <span className="legend-item">
-            <span className="legend-dot ladder-dot" /> Seedhi (Ladder)
+            <span className="legend-dot ladder-dot" /> {t('ladderLegend')}
           </span>
           <span className="legend-item">
-            <span className="legend-dot player-dot" /> You
+            <span className="legend-dot player-dot" /> {t('youLegend')}
           </span>
         </div>
       </div>

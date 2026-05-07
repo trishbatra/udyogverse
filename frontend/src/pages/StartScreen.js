@@ -1,7 +1,9 @@
 import { useState } from 'react';
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
-import { STARTUP_PRESETS } from '../lib/gameData';
+import { STARTUP_PRESETS, getPresetLocalName } from '../lib/gameData';
+import { useLanguage } from '../lib/LanguageContext';
+import LanguagePicker from '../components/LanguagePicker';
 import {
   Cherry, Coffee, Scissors, GraduationCap, Wheat,
   UtensilsCrossed, Lightbulb, ArrowRight, Sparkles
@@ -11,11 +13,19 @@ const ICON_MAP = {
   Cherry, Coffee, Scissors, GraduationCap, Wheat, UtensilsCrossed,
 };
 
-export default function StartScreen({ onStart }) {
-  const [playerName, setPlayerName] = useState('');
-  const [selectedPreset, setSelectedPreset] = useState(null);
-  const [customIdea, setCustomIdea] = useState('');
-  const [showCustom, setShowCustom] = useState(false);
+export default function StartScreen({ onStart, prefillData }) {
+  const [playerName, setPlayerName] = useState(prefillData?.player_name || '');
+  const [selectedPreset, setSelectedPreset] = useState(() => {
+    if (prefillData?.startup_type && prefillData.startup_type !== 'custom') {
+      return STARTUP_PRESETS.find((p) => p.id === prefillData.startup_type) || null;
+    }
+    return null;
+  });
+  const [customIdea, setCustomIdea] = useState(
+    prefillData?.startup_type === 'custom' ? prefillData.startup_idea : ''
+  );
+  const [showCustom, setShowCustom] = useState(prefillData?.startup_type === 'custom');
+  const { lang, t } = useLanguage();
 
   const canStart = playerName.trim() && (selectedPreset || customIdea.trim());
 
@@ -30,26 +40,27 @@ export default function StartScreen({ onStart }) {
 
   return (
     <div className="start-screen" data-testid="start-screen">
-      {/* Background pattern overlay */}
       <div className="start-bg-pattern" />
 
       <div className="start-content">
+        <LanguagePicker />
+
         {/* Header */}
         <div className="start-header">
           <h1 className="start-title" data-testid="app-title">Udyogverse</h1>
-          <p className="start-subtitle">Learn business by playing</p>
-          <p className="start-subtitle-hindi">खेल खेल में बिज़नेस सीखो</p>
+          <p className="start-subtitle">{t('startSubtitle')}</p>
+          <p className="start-subtitle-hindi">{t('startSubtitleLocal')}</p>
         </div>
 
         {/* Player Name */}
         <div className="start-section">
           <label className="start-label">
             <Sparkles size={14} className="inline mr-1" />
-            Apna naam batao (Your Name)
+            {t('enterNameLabel')}
           </label>
           <Input
             data-testid="player-name-input"
-            placeholder="Enter your name..."
+            placeholder={t('namePlaceholder')}
             value={playerName}
             onChange={(e) => setPlayerName(e.target.value)}
             className="start-input"
@@ -61,7 +72,7 @@ export default function StartScreen({ onStart }) {
         <div className="start-section">
           <label className="start-label">
             <Lightbulb size={14} className="inline mr-1" />
-            Apna idea chuno (Choose your startup)
+            {t('chooseStartupLabel')}
           </label>
 
           <div className="preset-grid" data-testid="startup-presets">
@@ -81,7 +92,7 @@ export default function StartScreen({ onStart }) {
                 >
                   <Icon size={24} className="preset-icon" />
                   <span className="preset-name">{preset.name}</span>
-                  <span className="preset-hindi">{preset.nameHindi}</span>
+                  <span className="preset-hindi">{getPresetLocalName(preset, lang)}</span>
                 </button>
               );
             })}
@@ -96,15 +107,15 @@ export default function StartScreen({ onStart }) {
               }}
             >
               <Lightbulb size={24} className="preset-icon" />
-              <span className="preset-name">Custom Idea</span>
-              <span className="preset-hindi">अपना आइडिया</span>
+              <span className="preset-name">{t('customIdeaName')}</span>
+              <span className="preset-hindi">{t('customIdeaLocal')}</span>
             </button>
           </div>
 
           {showCustom && (
             <Input
               data-testid="custom-idea-input"
-              placeholder="Describe your startup idea..."
+              placeholder={t('customPlaceholder')}
               value={customIdea}
               onChange={(e) => setCustomIdea(e.target.value)}
               className="start-input mt-3"
@@ -119,7 +130,7 @@ export default function StartScreen({ onStart }) {
             <p className="text-sm text-[#7F8C8D]">
               {selectedPreset
                 ? selectedPreset.description
-                : `Custom startup: "${customIdea}"`}
+                : `${t('customSummaryPrefix')}: "${customIdea}"`}
             </p>
           </div>
         )}
@@ -132,12 +143,12 @@ export default function StartScreen({ onStart }) {
           onClick={handleStart}
           disabled={!canStart}
         >
-          Shuruaat Karo
+          {t('startButton')}
           <ArrowRight size={20} className="ml-2" />
         </Button>
 
         <p className="start-footer">
-          Roll the dice. Build your empire. Become a Safal Udyami!
+          {t('startFooter')}
         </p>
       </div>
     </div>

@@ -261,6 +261,11 @@ export function useGameEngine() {
     setIsStarted(false);
   }, []);
 
+  const restoreGame = useCallback((savedState) => {
+    setState(savedState);
+    setIsStarted(true);
+  }, []);
+
   return {
     state,
     isStarted,
@@ -270,5 +275,6 @@ export function useGameEngine() {
     acknowledgeEvent,
     nextTurn,
     resetGame,
+    restoreGame,
   };
 }

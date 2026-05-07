@@ -1,4 +1,5 @@
 import { Dice3, ArrowDown, ArrowUp, AlertTriangle, TrendingUp } from 'lucide-react';
+import { useLanguage } from '../../lib/LanguageContext';
 
 const EVENT_ICONS = {
   snake: <ArrowDown size={10} className="text-red-500" />,
@@ -8,10 +9,12 @@ const EVENT_ICONS = {
 };
 
 export default function TurnLog({ history }) {
+  const { t } = useLanguage();
+
   if (history.length === 0) {
     return (
       <p className="text-xs text-[#7F8C8D] p-2" data-testid="empty-turn-log">
-        Abhi koi turn nahi hua... Shuruaat karo!
+        {t('emptyLog')}
       </p>
     );
   }
@@ -25,7 +28,7 @@ export default function TurnLog({ history }) {
           <span className="log-dice">
             <Dice3 size={10} /> {entry.dice}
           </span>
-          <span className="log-tile">Tile {entry.tile}</span>
+          <span className="log-tile">{t('tileWord')} {entry.tile}</span>
           <span className="log-events">
             {entry.events.map((e, j) => (
               <span key={j}>{EVENT_ICONS[e]}</span>

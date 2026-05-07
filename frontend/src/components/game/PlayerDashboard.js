@@ -1,4 +1,5 @@
-import { getStageForTile, REP_LABELS, BURN_LABELS } from '../../lib/gameData';
+import { getStageForTile, getStageName, REP_LABELS, BURN_LABELS } from '../../lib/gameData';
+import { useLanguage } from '../../lib/LanguageContext';
 import BugMeter from './BugMeter';
 import TurnLog from './TurnLog';
 import { ScrollArea } from '../ui/scroll-area';
@@ -6,13 +7,19 @@ import {
   IndianRupee, Users, Star, Flame, PieChart, MapPin
 } from 'lucide-react';
 
+const LEVEL_KEY = { 'Low': 'low', 'Medium': 'medium', 'High': 'high' };
+
 export default function PlayerDashboard({ state }) {
   const stage = getStageForTile(state.tile);
+  const { lang, t } = useLanguage();
+
+  const repLabel = t(LEVEL_KEY[REP_LABELS[state.reputation]]);
+  const burnLabel = t(LEVEL_KEY[BURN_LABELS[state.burn]]);
 
   return (
     <div className="player-dashboard" data-testid="player-dashboard">
       <div className="dashboard-header">
-        <h2 className="dashboard-title">Dashboard</h2>
+        <h2 className="dashboard-title">{t('dashboard')}</h2>
         <span className="dashboard-player">{state.playerName}</span>
       </div>
 
@@ -23,9 +30,9 @@ export default function PlayerDashboard({ state }) {
             <IndianRupee size={16} />
           </div>
           <div className="metric-info">
-            <span className="metric-label">Funds</span>
+            <span className="metric-label">{t('funds')}</span>
             <span className={`metric-value ${state.funds <= 5000 ? 'text-red-600' : ''}`}>
-              Rs.{state.funds.toLocaleString('en-IN')}
+              {t('currencyPrefix')}{state.funds.toLocaleString('en-IN')}
             </span>
           </div>
         </div>
@@ -35,7 +42,7 @@ export default function PlayerDashboard({ state }) {
             <Users size={16} />
           </div>
           <div className="metric-info">
-            <span className="metric-label">Customers</span>
+            <span className="metric-label">{t('customers')}</span>
             <span className="metric-value">{state.customers}</span>
           </div>
         </div>
@@ -45,9 +52,9 @@ export default function PlayerDashboard({ state }) {
             <Star size={16} />
           </div>
           <div className="metric-info">
-            <span className="metric-label">Reputation</span>
+            <span className="metric-label">{t('reputation')}</span>
             <span className={`metric-value ${state.reputation === 1 ? 'text-red-600' : state.reputation === 3 ? 'text-green-600' : ''}`}>
-              {REP_LABELS[state.reputation]}
+              {repLabel}
             </span>
           </div>
         </div>
@@ -57,9 +64,9 @@ export default function PlayerDashboard({ state }) {
             <Flame size={16} />
           </div>
           <div className="metric-info">
-            <span className="metric-label">Burn Rate</span>
+            <span className="metric-label">{t('burnRate')}</span>
             <span className={`metric-value ${state.burn === 3 ? 'text-red-600' : ''}`}>
-              {BURN_LABELS[state.burn]}
+              {burnLabel}
             </span>
           </div>
         </div>
@@ -69,7 +76,7 @@ export default function PlayerDashboard({ state }) {
             <PieChart size={16} />
           </div>
           <div className="metric-info">
-            <span className="metric-label">Ownership</span>
+            <span className="metric-label">{t('ownership')}</span>
             <span className="metric-value">{state.ownership}%</span>
           </div>
         </div>
@@ -79,8 +86,8 @@ export default function PlayerDashboard({ state }) {
             <MapPin size={16} />
           </div>
           <div className="metric-info">
-            <span className="metric-label">Stage</span>
-            <span className="metric-value text-sm">{stage.name}</span>
+            <span className="metric-label">{t('stage')}</span>
+            <span className="metric-value text-sm">{getStageName(stage, lang)}</span>
           </div>
         </div>
       </div>
@@ -90,7 +97,7 @@ export default function PlayerDashboard({ state }) {
 
       {/* Stage Progress */}
       <div className="stage-progress" data-testid="stage-progress">
-        <span className="metric-label">Customer Target</span>
+        <span className="metric-label">{t('customerTarget')}</span>
         <div className="stage-progress-bar">
           <div
             className="stage-progress-fill"
@@ -106,7 +113,7 @@ export default function PlayerDashboard({ state }) {
 
       {/* Turn Log */}
       <div className="turn-log-section">
-        <span className="metric-label">Turn Log</span>
+        <span className="metric-label">{t('turnLog')}</span>
         <ScrollArea className="h-[160px]">
           <TurnLog history={state.turnHistory} />
         </ScrollArea>

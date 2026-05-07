@@ -1,18 +1,19 @@
 import { useState } from 'react';
 import { Dice1, Dice2, Dice3, Dice4, Dice5, Dice6 } from 'lucide-react';
 import { Button } from '../ui/button';
+import { useLanguage } from '../../lib/LanguageContext';
 
 const DICE_ICONS = [null, Dice1, Dice2, Dice3, Dice4, Dice5, Dice6];
 
 export default function DiceRoll({ onRoll }) {
   const [isRolling, setIsRolling] = useState(false);
   const [displayFace, setDisplayFace] = useState(1);
+  const { t } = useLanguage();
 
   const handleRoll = () => {
     if (isRolling) return;
     setIsRolling(true);
 
-    // Animate dice faces rapidly
     let count = 0;
     const interval = setInterval(() => {
       setDisplayFace(Math.floor(Math.random() * 6) + 1);
@@ -39,7 +40,7 @@ export default function DiceRoll({ onRoll }) {
         size="lg"
         className="roll-button"
       >
-        {isRolling ? 'Rolling...' : 'Pasa Phenk! (Roll Dice)'}
+        {isRolling ? t('rolling') : t('rollDice')}
       </Button>
     </div>
   );

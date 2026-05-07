@@ -1,20 +1,22 @@
 import { Button } from '../ui/button';
+import { useLanguage } from '../../lib/LanguageContext';
 import {
   ArrowDown, ArrowUp, AlertTriangle, TrendingUp,
   Trophy, Frown, AlertCircle
 } from 'lucide-react';
 
 const EVENT_CONFIG = {
-  snake: { icon: ArrowDown, color: '#C0392B', bg: '#FDEDEC', title: 'Saanp! (Snake)' },
-  ladder: { icon: ArrowUp, color: '#27AE60', bg: '#EAFAF1', title: 'Seedhi! (Ladder)' },
-  bug: { icon: AlertTriangle, color: '#E67E22', bg: '#FEF5E7', title: 'Bug Alert!' },
-  stageUp: { icon: TrendingUp, color: '#2E86C1', bg: '#EBF5FB', title: 'Stage Up!' },
-  win: { icon: Trophy, color: '#F39C12', bg: '#FEF9E7', title: 'Safal Udyam!' },
-  hardLose: { icon: Frown, color: '#C0392B', bg: '#FDEDEC', title: 'Game Over' },
-  struggle: { icon: AlertCircle, color: '#E67E22', bg: '#FEF5E7', title: 'Struggle Mode' },
+  snake:    { icon: ArrowDown,    color: '#C0392B', bg: '#FDEDEC', titleKey: 'eventSnakeTitle' },
+  ladder:   { icon: ArrowUp,      color: '#27AE60', bg: '#EAFAF1', titleKey: 'eventLadderTitle' },
+  bug:      { icon: AlertTriangle,color: '#E67E22', bg: '#FEF5E7', titleKey: 'eventBugTitle' },
+  stageUp:  { icon: TrendingUp,   color: '#2E86C1', bg: '#EBF5FB', titleKey: 'eventStageUpTitle' },
+  win:      { icon: Trophy,       color: '#F39C12', bg: '#FEF9E7', titleKey: 'eventWinTitle' },
+  hardLose: { icon: Frown,        color: '#C0392B', bg: '#FDEDEC', titleKey: 'eventGameOverTitle' },
+  struggle: { icon: AlertCircle,  color: '#E67E22', bg: '#FEF5E7', titleKey: 'eventStruggleTitle' },
 };
 
 export default function EventModal({ event, onAcknowledge }) {
+  const { t } = useLanguage();
   if (!event) return null;
 
   const config = EVENT_CONFIG[event.type] || EVENT_CONFIG.bug;
@@ -26,7 +28,7 @@ export default function EventModal({ event, onAcknowledge }) {
         <div className="event-header" style={{ backgroundColor: config.bg }}>
           <Icon size={28} style={{ color: config.color }} />
           <h3 className="event-title" style={{ color: config.color }}>
-            {config.title}
+            {t(config.titleKey)}
           </h3>
         </div>
 
@@ -45,8 +47,8 @@ export default function EventModal({ event, onAcknowledge }) {
           {event.type === 'snake' && (
             <div className="event-effect snake-effect">
               <ArrowDown size={16} />
-              Tile {event.fromTile} se {event.toTile} tak gire!
-              <span className="text-xs block mt-1">(-5 customers, -Rs.3,000)</span>
+              {t('snakeFell', event.fromTile, event.toTile)}
+              <span className="text-xs block mt-1">{t('snakeEffectText')}</span>
             </div>
           )}
 
@@ -54,8 +56,8 @@ export default function EventModal({ event, onAcknowledge }) {
           {event.type === 'ladder' && (
             <div className="event-effect ladder-effect">
               <ArrowUp size={16} />
-              Tile {event.fromTile} se {event.toTile} tak chadhe!
-              <span className="text-xs block mt-1">(+10 customers)</span>
+              {t('ladderClimbed', event.fromTile, event.toTile)}
+              <span className="text-xs block mt-1">{t('ladderEffectText')}</span>
             </div>
           )}
 
@@ -63,8 +65,8 @@ export default function EventModal({ event, onAcknowledge }) {
           {event.type === 'stageUp' && (
             <div className="event-effect stage-effect">
               <TrendingUp size={16} />
-              {event.prevStageName} complete! Welcome to {event.stageName}!
-              <span className="text-xs block mt-1">(+Rs.{event.reward?.toLocaleString('en-IN')} reward)</span>
+              {event.prevStageName} {t('stageComplete')} {event.stageName}!
+              <span className="text-xs block mt-1">(+{t('currencyPrefix')}{event.reward?.toLocaleString('en-IN')} {t('rewardWord')})</span>
             </div>
           )}
 
@@ -72,8 +74,8 @@ export default function EventModal({ event, onAcknowledge }) {
           {event.type === 'win' && (
             <div className="event-effect win-effect">
               <Trophy size={16} />
-              Congratulations! Aap Safal Udyami ban gaye!
-              <span className="text-xs block mt-1">You built a successful business!</span>
+              {t('winText')}
+              <span className="text-xs block mt-1">{t('winSubText')}</span>
             </div>
           )}
 
@@ -81,8 +83,8 @@ export default function EventModal({ event, onAcknowledge }) {
           {event.type === 'struggle' && (
             <div className="event-effect struggle-effect">
               <AlertCircle size={16} />
-              Funds khatam ho rahe hain! Sambhal ke chalo.
-              <span className="text-xs block mt-1">Recovery is still possible!</span>
+              {t('struggleText')}
+              <span className="text-xs block mt-1">{t('struggleSubText')}</span>
             </div>
           )}
 
@@ -90,8 +92,8 @@ export default function EventModal({ event, onAcknowledge }) {
           {event.type === 'hardLose' && (
             <div className="event-effect lose-effect">
               <Frown size={16} />
-              Business band karna pada. Par haar mat mano!
-              <span className="text-xs block mt-1">Every failure is a lesson.</span>
+              {t('loseText')}
+              <span className="text-xs block mt-1">{t('loseSubText')}</span>
             </div>
           )}
         </div>
@@ -103,7 +105,7 @@ export default function EventModal({ event, onAcknowledge }) {
             className="event-btn"
             style={{ backgroundColor: config.color }}
           >
-            {event.type === 'win' || event.type === 'hardLose' ? 'Dekho Result' : 'Aage Badho'}
+            {event.type === 'win' || event.type === 'hardLose' ? t('acknowledgeWin') : t('acknowledgeNext')}
           </Button>
         </div>
       </div>

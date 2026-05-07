@@ -1,5 +1,5 @@
 /* Udyogverse - Game Styles */
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Work+Sans:wght@300;400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Work+Sans:wght@300;400;500;600&family=Noto+Sans+Telugu:wght@400;600;700&display=swap');
 
 /* ===== START SCREEN ===== */
 .start-screen {
@@ -251,6 +251,179 @@
 .topbar-reset:hover {
   color: #C0392B;
   border-color: #C0392B;
+}
+
+.topbar-lang-picker {
+  font-size: 0.7rem;
+  padding: 0.25rem 1.2rem 0.25rem 0.5rem;
+  background-color: rgba(255,255,255,0.15);
+  border-color: rgba(255,255,255,0.3);
+  color: #2E4053;
+}
+
+.lang-toggle-btn {
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 0.25rem 0.6rem;
+  border-radius: 6px;
+  border: 1px solid #E5E7EB;
+  background: white;
+  color: #7F8C8D;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: 'Noto Sans Telugu', 'Work Sans', sans-serif;
+}
+
+.lang-toggle-btn:hover {
+  color: #D35400;
+  border-color: #D35400;
+}
+
+.start-content .lang-toggle-btn {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+}
+
+/* ===== LANGUAGE PICKER ===== */
+.lang-picker {
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.25rem 0.5rem;
+  border-radius: 6px;
+  border: 1px solid #E5E7EB;
+  background: white;
+  color: #7F8C8D;
+  cursor: pointer;
+  font-family: 'Noto Sans Telugu', 'Work Sans', sans-serif;
+  transition: all 0.2s;
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%237F8C8D'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 6px center;
+  padding-right: 1.4rem;
+}
+
+.lang-picker:hover,
+.lang-picker:focus {
+  color: #D35400;
+  border-color: #D35400;
+  outline: none;
+}
+
+.start-content .lang-picker {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+}
+
+/* ===== AUTH SCREEN ===== */
+.auth-tabs {
+  display: flex;
+  gap: 0;
+  margin-bottom: 1.5rem;
+  border-radius: 12px;
+  background: #F0E6D3;
+  padding: 4px;
+}
+
+.auth-tab {
+  flex: 1;
+  padding: 0.6rem 1rem;
+  font-family: 'Work Sans', sans-serif;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #7F8C8D;
+  border: none;
+  background: transparent;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.auth-tab-active {
+  background: #D35400;
+  color: #fff;
+}
+
+.password-input-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.password-input-field {
+  padding-right: 2.5rem !important;
+  width: 100%;
+}
+
+.password-eye-btn {
+  position: absolute;
+  right: 0.7rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #7F8C8D;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  transition: color 0.2s;
+}
+
+.password-eye-btn:hover {
+  color: #D35400;
+}
+
+.input-error {
+  border-color: #E74C3C !important;
+}
+
+.signup-missing {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  align-items: center;
+  margin-top: 0.6rem;
+}
+
+.signup-missing-label {
+  font-size: 0.72rem;
+  color: #7F8C8D;
+  font-family: 'Work Sans', sans-serif;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-right: 0.2rem;
+}
+
+.signup-missing-item {
+  font-size: 0.72rem;
+  background: #FFF3E0;
+  color: #D35400;
+  border: 1px solid rgba(211,84,0,0.25);
+  border-radius: 4px;
+  padding: 0.1rem 0.5rem;
+  font-family: 'Work Sans', sans-serif;
+  font-weight: 500;
+}
+
+.auth-field-error {
+  color: #E74C3C;
+  font-size: 0.75rem;
+  margin-top: 0.35rem;
+  font-family: 'Work Sans', sans-serif;
+}
+
+.auth-error {
+  background: #FDECEA;
+  border: 1px solid #F5C6CB;
+  color: #C0392B;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  margin-bottom: 1rem;
+  font-family: 'Work Sans', sans-serif;
 }
 
 /* Game Layout */
